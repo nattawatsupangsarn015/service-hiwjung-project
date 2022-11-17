@@ -1,0 +1,29 @@
+version: "2"
+
+services:
+  backend_hiwjung:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - ../service-hiwjung-project:/go/src/go-with-compose
+    working_dir: /go/src/go-with-compose
+    ports:
+      - "3000:3000"
+    environment:
+      - CONNECTION_DB=mongodb://mongodb_hiwjung:27017
+    env_file:
+      - .env
+    depends_on:
+      - mongodb_hiwjung
+  mongodb_hiwjung:
+    image: mongo:latest
+    container_name: "mongodb_hiwjung"
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - "27019:27017"
+    command: mongod  --logpath=/dev/null #

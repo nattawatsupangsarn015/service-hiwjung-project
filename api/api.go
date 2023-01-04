@@ -2,6 +2,7 @@ package api
 
 import (
 	"example/service-hiwjung-project/api/home"
+	"example/service-hiwjung-project/api/menus"
 	"example/service-hiwjung-project/api/products"
 
 	"github.com/gin-gonic/gin"
@@ -18,5 +19,6 @@ func Router(NODE_ENV string) *gin.Engine {
 
 	home.Routes(router)
 	products.Routes(router)
+	menus.Routes(router)
 	return router
 }

@@ -1,6 +1,6 @@
 package responses
 
-type MenuRequestCreate struct {
+type IngredientRequestCreate struct {
 	Name       string   `json:"name"`
 	Ingredient []string `json:"Ingredient"`
 }

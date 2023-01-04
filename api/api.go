@@ -3,6 +3,8 @@ package api
 import (
 	"example/service-hiwjung-project/api/menus"
 
+	"example/service-hiwjung-project/api/ingredients"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,5 +18,6 @@ func Router(NODE_ENV string) *gin.Engine {
 	router.GET("/healthcheck", healthcheck)
 
 	menus.Routes(router)
+	ingredients.Routes(router)
 	return router
 }

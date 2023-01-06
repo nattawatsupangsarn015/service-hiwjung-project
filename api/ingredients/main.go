@@ -12,12 +12,13 @@ func Routes(route *gin.Engine) {
 	ingredient := route.Group("/ingredient")
 	ingredients.GET("/", func(c *gin.Context) {
 		result := GetAllIngredients()
-		c.JSON(http.StatusOK, result)
+		c.JSON(http.StatusOK, gin.H{ "data": result })
 	})
 
 	ingredient.GET("/:id", func(c *gin.Context) {
 		id := c.Param("id")
-		c.JSON(http.StatusOK, id)
+		result := GetIngredientById(id);
+		c.JSON(http.StatusOK,  gin.H{ "data": result })
 	})
 
 	ingredient.POST("/", func(c *gin.Context) {

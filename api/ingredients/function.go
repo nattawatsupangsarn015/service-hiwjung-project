@@ -2,6 +2,7 @@ package ingredients
 
 import (
 	"example/service-hiwjung-project/controller"
+	"example/service-hiwjung-project/responses"
 )
 
 func GetAllIngredients() interface{} {
@@ -14,4 +15,8 @@ func GetIngredientById(id string) interface{} {
 
 func CreateIngredient(Ingredient interface{}) (interface{}, error) {
 	return Ingredient, nil
+}
+
+func UpdateIngredientById(id string, ingredient responses.IngredientRequestUpdate) (interface{}, error) {
+	return controller.UpdateIngredientById(id, ingredient)
 }

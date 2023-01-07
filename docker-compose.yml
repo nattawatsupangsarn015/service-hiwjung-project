@@ -9,7 +9,7 @@ services:
       - ../service-hiwjung-project:/go/src/go-with-compose
     working_dir: /go/src/go-with-compose
     ports:
-      - "24650:24650"
+      - "3000:3000"
     environment:
       - CONNECTION_DB=mongodb://mongodb_hiwjung:27017
     env_file:

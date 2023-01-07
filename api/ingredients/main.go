@@ -12,13 +12,13 @@ func Routes(route *gin.Engine) {
 	ingredient := route.Group("/ingredient")
 	ingredients.GET("/", func(c *gin.Context) {
 		result := GetAllIngredients()
-		c.JSON(http.StatusOK, gin.H{ "data": result })
+		c.JSON(http.StatusOK, gin.H{"data": result})
 	})
 
 	ingredient.GET("/:id", func(c *gin.Context) {
 		id := c.Param("id")
-		result := GetIngredientById(id);
-		c.JSON(http.StatusOK,  gin.H{ "data": result })
+		result := GetIngredientById(id)
+		c.JSON(http.StatusOK, gin.H{"data": result})
 	})
 
 	ingredient.POST("/", func(c *gin.Context) {
@@ -31,6 +31,19 @@ func Routes(route *gin.Engine) {
 		result, err := CreateIngredient(ingredient)
 		HandleResponse(c, result, err, 201, 500)
 	})
+
+	ingredient.PUT("/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		var ingredient responses.IngredientRequestUpdate
+
+		if err := c.BindJSON(&ingredient); err != nil {
+			HandleBadRequest(c, err)
+		}
+
+		result, err := UpdateIngredientById(id, ingredient)
+		HandleResponse(c, result, err, 201, 500)
+	})
+
 }
 
 func HandleBadRequest(c *gin.Context, structure interface{}) {

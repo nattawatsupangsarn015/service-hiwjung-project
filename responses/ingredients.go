@@ -3,8 +3,7 @@ package responses
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type IngredientRequestCreate struct {
-	Name       string   `json:"name"`
-	Ingredient []string `json:"Ingredient"`
+	Name string `json:"name"`
 }
 
 type IngredientRequestUpdate struct {

@@ -42,8 +42,9 @@ func GetIngredientById(id string) interface{} {
 	return result
 }
 
-func CreateIngredient() string {
-	return "CREATED Ingredient!!"
+func CreateIngredient(Ingredient responses.IngredientRequestCreate) error {
+	_, err := ingredientCollection.InsertOne(context.TODO(), Ingredient)
+	return err
 }
 
 func UpdateIngredientById(id string, ingredinet responses.IngredientRequestUpdate) (model.Ingredients, error) {

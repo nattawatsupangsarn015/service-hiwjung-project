@@ -10,6 +10,7 @@ import (
 func Routes(route *gin.Engine) {
 	ingredients := route.Group("/ingredients")
 	ingredient := route.Group("/ingredient")
+
 	ingredients.GET("/", func(c *gin.Context) {
 		result := GetAllIngredients()
 		c.JSON(http.StatusOK, gin.H{"data": result})
@@ -21,9 +22,14 @@ func Routes(route *gin.Engine) {
 		c.JSON(http.StatusOK, gin.H{"data": result})
 	})
 
+	ingredient.GET("/by-name/:name", func(c *gin.Context) {
+		name := c.Param("name")
+		result, err := GetIngredientByName(name)
+		HandleResponse(c, result, err, 200, 500)
+	})
+
 	ingredient.POST("/", func(c *gin.Context) {
 		var ingredient responses.IngredientRequestCreate
-
 		if err := c.BindJSON(&ingredient); err != nil {
 			HandleBadRequest(c, err)
 		}

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"example/service-hiwjung-project/api/dishes"
 	"example/service-hiwjung-project/api/menus"
 
 	"example/service-hiwjung-project/api/ingredients"
@@ -19,5 +20,6 @@ func Router(NODE_ENV string) *gin.Engine {
 
 	menus.Routes(router)
 	ingredients.Routes(router)
+	dishes.Routes(router)
 	return router
 }

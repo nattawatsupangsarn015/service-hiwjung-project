@@ -42,6 +42,21 @@ func GetIngredientById(id string) interface{} {
 	return result
 }
 
+func GetIngredientByName(name string) (model.Ingredients, error) {
+	filter := bson.M{"Name": name}
+	var result model.Ingredients
+	err := ingredientCollection.FindOne(context.TODO(), filter).Decode(&result)
+
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return model.Ingredients{}, nil
+		}
+		return model.Ingredients{}, err
+	}
+
+	return result, nil
+}
+
 func CreateIngredient(Ingredient responses.IngredientRequestCreate) error {
 	_, err := ingredientCollection.InsertOne(context.TODO(), Ingredient)
 	return err

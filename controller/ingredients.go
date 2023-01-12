@@ -42,16 +42,16 @@ func GetIngredientById(id string) interface{} {
 	return result
 }
 
-func GetIngredientByName(name string) (model.Ingredients, error) {
-	filter := bson.M{"Name": name}
+func GetIngredientByName(name string) (interface{}, error) {
+	filter := bson.M{"name": name}
 	var result model.Ingredients
 	err := ingredientCollection.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return model.Ingredients{}, nil
+			return nil, nil
 		}
-		return model.Ingredients{}, err
+		return nil, err
 	}
 
 	return result, nil
@@ -64,7 +64,6 @@ func CreateIngredient(Ingredient responses.IngredientRequestCreate) error {
 
 func UpdateIngredientById(id string, ingredinet responses.IngredientRequestUpdate) (model.Ingredients, error) {
 	objectId, err := primitive.ObjectIDFromHex(id)
-
 	if err != nil {
 		return model.Ingredients{}, err
 	}
@@ -75,10 +74,30 @@ func UpdateIngredientById(id string, ingredinet responses.IngredientRequestUpdat
 	var updatedIngredient model.Ingredients
 	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
 	err = ingredientCollection.FindOneAndUpdate(context.TODO(), filter, update, opts).Decode(&updatedIngredient)
-
 	if err != nil {
 		return model.Ingredients{}, err
 	}
 
 	return updatedIngredient, nil
+}
+
+func ActivateIngredientById(id string) error {
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	filter := bson.M{"_id": objectId}
+	update := bson.M{"$set": bson.M{"isActive": true}}
+
+	ingredientCollection.FindOneAndUpdate(context.TODO(), filter, update)
+	return nil
+}
+
+func CreateIngredientActive(ingredient model.Ingredients) (interface{}, error) {
+	result, err := ingredientCollection.InsertOne(context.TODO(), ingredient)
+	if err != nil {
+		return nil, err
+	}
+	return result.InsertedID, nil
 }

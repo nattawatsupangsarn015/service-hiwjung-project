@@ -8,6 +8,7 @@ import (
 
 type Ingredient struct {
 	IngredientID primitive.ObjectID `json:"_id" bson:"_id,omitempty"`
+	Unit         string             `json:"unit" bson:"unit"`
 	Amount       float64            `json:"amount" bson:"amount"`
 }
 

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func Routes(route *gin.Engine) {
@@ -41,13 +42,18 @@ func Routes(route *gin.Engine) {
 	ingredient.PUT("/:id", func(c *gin.Context) {
 		id := c.Param("id")
 		var ingredient responses.IngredientRequestUpdate
-
 		if err := c.BindJSON(&ingredient); err != nil {
 			HandleBadRequest(c, err)
 		}
 
 		result, err := UpdateIngredientById(id, ingredient)
 		HandleResponse(c, result, err, 201, 500)
+	})
+
+	ingredient.PUT("/activate/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		err := ActivateIngredientById(id)
+		HandleResponse(c, bson.M{"message": "OK"}, err, 200, 500)
 	})
 
 }

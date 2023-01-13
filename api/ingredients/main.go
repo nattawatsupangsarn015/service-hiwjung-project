@@ -2,6 +2,7 @@ package ingredients
 
 import (
 	"example/service-hiwjung-project/responses"
+	"example/service-hiwjung-project/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,60 +16,51 @@ func Routes(route *gin.Engine) {
 	ingredients.GET("/", func(c *gin.Context) {
 		result := GetAllIngredients()
 		c.JSON(http.StatusOK, gin.H{"data": result})
+		return
 	})
 
 	ingredient.GET("/:id", func(c *gin.Context) {
 		id := c.Param("id")
 		result := GetIngredientById(id)
 		c.JSON(http.StatusOK, gin.H{"data": result})
+		return
 	})
 
 	ingredient.GET("/by-name/:name", func(c *gin.Context) {
 		name := c.Param("name")
 		result, err := GetIngredientByName(name)
-		HandleResponse(c, result, err, 200, 500)
+		utils.HandleResponse(c, result, err, 200, 500)
+		return
 	})
 
 	ingredient.POST("/", func(c *gin.Context) {
 		var ingredient responses.IngredientRequestCreate
 		if err := c.BindJSON(&ingredient); err != nil {
-			HandleBadRequest(c, err)
+			utils.HandleBadRequest(c, err)
 		}
 
 		result, err := CreateIngredient(ingredient)
-		HandleResponse(c, result, err, 201, 500)
+		utils.HandleResponse(c, result, err, 201, 500)
+		return
 	})
 
 	ingredient.PUT("/:id", func(c *gin.Context) {
 		id := c.Param("id")
 		var ingredient responses.IngredientRequestUpdate
 		if err := c.BindJSON(&ingredient); err != nil {
-			HandleBadRequest(c, err)
+			utils.HandleBadRequest(c, err)
+			return
 		}
 
 		result, err := UpdateIngredientById(id, ingredient)
-		HandleResponse(c, result, err, 201, 500)
+		utils.HandleResponse(c, result, err, 201, 500)
+		return
 	})
 
 	ingredient.PUT("/activate/:id", func(c *gin.Context) {
 		id := c.Param("id")
 		err := ActivateIngredientById(id)
-		HandleResponse(c, bson.M{"message": "OK"}, err, 200, 500)
-	})
-
-}
-
-func HandleBadRequest(c *gin.Context, structure interface{}) {
-	if err := c.BindJSON(&structure); err != nil {
-		c.JSON(http.StatusBadRequest, responses.Response{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		utils.HandleResponse(c, bson.M{"message": "OK"}, err, 200, 500)
 		return
-	}
-}
-
-func HandleResponse(c *gin.Context, response interface{}, err error, status int, statusError int) {
-	if err != nil {
-		c.JSON(statusError, err)
-	} else {
-		c.JSON(status, response)
-	}
+	})
 }

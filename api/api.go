@@ -3,6 +3,7 @@ package api
 import (
 	"example/service-hiwjung-project/api/admins"
 	"example/service-hiwjung-project/api/dishes"
+	"example/service-hiwjung-project/api/line"
 	"example/service-hiwjung-project/api/menus"
 	"example/service-hiwjung-project/utils"
 
@@ -21,6 +22,7 @@ func Router(NODE_ENV string) *gin.Engine {
 	router.GET("/healthcheck", healthcheck)
 
 	admins.Routes(router)
+	line.Routes(router)
 
 	router.Use(utils.JwtMiddleware())
 	menus.Routes(router)

@@ -1,10 +1,14 @@
 package utils
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
+	"example/service-hiwjung-project/model"
 	"example/service-hiwjung-project/responses"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -89,4 +93,35 @@ func JwtMiddleware() gin.HandlerFunc {
 
 		c.Next()
 	}
+}
+
+func LogWithTypeStruct(data interface{}) {
+	jsonData, _ := json.MarshalIndent(data, "", "    ")
+	fmt.Println(string(jsonData))
+}
+
+func ReplyMessageLine(Message model.ReplyMessage) error {
+	value, _ := json.Marshal(Message)
+
+	CHANNEL_TOKEN := os.Getenv("CHANNEL_TOKEN")
+	url := os.Getenv("API_LINE_REPLY")
+
+	var jsonStr = []byte(value)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+CHANNEL_TOKEN)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil
+	}
+	defer resp.Body.Close()
+
+	log.Println("response Status:", resp.Status)
+	log.Println("response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+	log.Println("response Body:", string(body))
+
+	return err
 }

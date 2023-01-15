@@ -7,7 +7,6 @@ import (
 	"example/service-hiwjung-project/model"
 	"example/service-hiwjung-project/responses"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -114,14 +113,14 @@ func ReplyMessageLine(Message model.ReplyMessage) error {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil
+		return err
 	}
 	defer resp.Body.Close()
 
 	log.Println("response Status:", resp.Status)
-	log.Println("response Headers:", resp.Header)
-	body, _ := ioutil.ReadAll(resp.Body)
-	log.Println("response Body:", string(body))
+	// log.Println("response Headers:", resp.Header)
+	// body, _ := ioutil.ReadAll(resp.Body)
+	// log.Println("response Body:", string(body))
 
 	return err
 }

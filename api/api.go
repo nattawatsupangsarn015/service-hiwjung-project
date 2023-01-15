@@ -2,6 +2,7 @@ package api
 
 import (
 	"example/service-hiwjung-project/api/admins"
+	"example/service-hiwjung-project/api/chatbot"
 	"example/service-hiwjung-project/api/dishes"
 	"example/service-hiwjung-project/api/line"
 	"example/service-hiwjung-project/api/menus"
@@ -25,6 +26,7 @@ func Router(NODE_ENV string) *gin.Engine {
 	line.Routes(router)
 
 	router.Use(utils.JwtMiddleware())
+	chatbot.Routes(router)
 	menus.Routes(router)
 	ingredients.Routes(router)
 	dishes.Routes(router)

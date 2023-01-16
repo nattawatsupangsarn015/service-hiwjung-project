@@ -29,7 +29,7 @@ func CreateChatbot(chatbot responses.RequestCreateChatbot) (interface{}, error) 
 
 		err = controller.CreateChatbot(newChatbot)
 		if err != nil {
-			return nil, nil
+			return nil, err
 		}
 		return newChatbot, nil
 	}

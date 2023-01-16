@@ -12,7 +12,7 @@ import (
 var messagesCollection *mongo.Collection = config.GetCollection(config.DB, "messages")
 
 func CreateChatbot(chatbot model.ChatbotReply) error {
-	err := CreateUniqueField(userCollection, bson.M{"message": 1})
+	err := CreateUniqueField(messagesCollection, bson.M{"message": 1})
 	if err != nil {
 		return err
 	}
